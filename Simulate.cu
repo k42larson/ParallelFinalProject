@@ -339,6 +339,8 @@ __global__ void add( int *GoingWon, int *NotGoingWon, unsigned int seed ) {
 }
 
 int main( void ) {
+	//create the arrays and pointers for keeping track
+	//of results
     	int GoingWon[N], NotGoingWon[N];
     	int *dev_a, *dev_b ;
 	
@@ -348,13 +350,13 @@ int main( void ) {
     	cudaMalloc( (void**)&dev_b, N * sizeof(int) );
 
 
-    	// fill the arrays 'a' and 'b' on the CPU
+    	// fill the arrays
     	for (int i=0; i<N; i++) {
         	GoingWon[i] = 0;
         	NotGoingWon[i] = 0;
    	}
 
-    	// copy the arrays 'a' and 'b' to the GPU
+    	// copy the arrays to the GPU
     	cudaMemcpy( dev_a, GoingWon, N * sizeof(int),
                               cudaMemcpyHostToDevice );
     	cudaMemcpy( dev_b, NotGoingWon, N * sizeof(int),
@@ -362,7 +364,7 @@ int main( void ) {
 
     	add<<<N,1>>>( dev_a, dev_b, time(NULL) );
 
-    	// copy the array 'c' back from the GPU to the CPU
+    	// copy the arrays' back from the GPU to the CPU
     	cudaMemcpy( GoingWon, dev_a, N * sizeof(int),
                               cudaMemcpyDeviceToHost );
 
